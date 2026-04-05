@@ -172,13 +172,11 @@ export default function App() {
   const keys = useRef<Record<string, boolean>>({});
 
   // Level Thresholds: Level L needs L * 100 points to pass
-  const getLevelThreshold = (l: number) => {
-    let total = 0;
-    for (let i = 1; i <= l; i++) {
-      total += i * 100;
-    }
-    return total;
-  };
+  const getLevelThreshold = useCallback((l: number) => {
+    // Threshold for level L is (L * (L + 1) / 2) * 100
+    // L=1: 100, L=2: 300, L=3: 600, L=4: 1000, L=5: 1500
+    return (l * (l + 1) / 2) * 100;
+  }, []);
 
   const initGame = useCallback(() => {
     const canvas = canvasRef.current;
@@ -272,17 +270,9 @@ export default function App() {
           e.health -= 10;
           bullets.current.splice(bi, 1);
           if (e.health <= 0) {
+            setScore(prev => prev + 10);
             soundManager.playExplosion();
             enemies.current.splice(ei, 1);
-            setScore(prev => {
-              const newScore = prev + 10;
-              // Check Level Up
-              const nextThreshold = getLevelThreshold(level);
-              if (newScore >= nextThreshold) {
-                setLevel(l => l + 1);
-              }
-              return newScore;
-            });
           }
         }
       });
@@ -402,6 +392,24 @@ export default function App() {
       window.removeEventListener('keyup', handleKeyUp);
     };
   }, [gameState, soundManager]);
+
+  useEffect(() => {
+    // Derive level from score
+    // Level 1: 0-99
+    // Level 2: 100-299
+    // Level 3: 300-599
+    // Level 4: 600-999
+    // Level 5: 1000-1499
+    // Level 6: 1500+
+    let calculatedLevel = 1;
+    while (score >= getLevelThreshold(calculatedLevel)) {
+      calculatedLevel++;
+    }
+    
+    if (calculatedLevel !== level) {
+      setLevel(calculatedLevel);
+    }
+  }, [score, level, getLevelThreshold]);
 
   useEffect(() => {
     if (level > 1) {
