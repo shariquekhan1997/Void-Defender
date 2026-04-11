@@ -2,7 +2,7 @@
   "name": "Void Defender",
   "short_name": "VoidDefender",
   "description": "A minimalistic space shooter game.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
