@@ -18,13 +18,6 @@ Void Defender is an exhilarating space-themed action game where players must pro
 - **Challenge Mode**: Complete specific objectives under time pressure.
 - **Multiplayer Arena**: Battle against other players in real-time combat.
 
-## System Requirements
-- **Operating System**: Windows 10+, macOS 10.15+, or Linux
-- **Processor**: Intel Core i5 or equivalent
-- **RAM**: 8GB minimum
-- **Graphics**: NVIDIA GTX 960 or AMD R9 290X equivalent
-- **Storage**: 2GB available space
-
 ## Installation
 
 ### Prerequisites
